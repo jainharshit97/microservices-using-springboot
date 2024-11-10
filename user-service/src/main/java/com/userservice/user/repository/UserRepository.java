@@ -1,10 +1,23 @@
 package com.userservice.user.repository;
 
-import com.userservice.user.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-@Repository
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.userservice.user.entity.User;
+
+import jakarta.transaction.Transactional;
+
+@Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
-  User findByUserId(Long userId);
+	
+	@Query("SELECT u FROM user_table u " +
+            "WHERE (:first_name IS NULL OR b.first_name = :firstname) " +
+            "AND (:last_name IS NULL OR b.last_name = :lastname)")
+     List<User> searchUsers(@Param("first_name") String firstname,
+                             @Param("last_name") String lastname);
+
+	User findByUserId(Long userId);
 }

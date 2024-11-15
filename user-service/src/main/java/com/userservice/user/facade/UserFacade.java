@@ -1,5 +1,6 @@
 package com.userservice.user.facade;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +17,64 @@ public class UserFacade {
 	@Autowired
 	private UserService userService;
 
-	public void addUser(UserResource userResource) {
+	public boolean addUser(UserResource userResource) {
 
 		User user = new User();
-		user.setFirstName(userResource.getFirstName());
-		user.setLastName(userResource.getLastName());
+		user.setFirst_name(userResource.getFirstName());
+		user.setLast_name(userResource.getLastName());
 		user.setEmail(userResource.getEmail());
-		user.setDepartmentId(userResource.getDepartmentId());
+		user.setDepartment_id(userResource.getDepartmentId());
 
-		userService.saveUser(user);
+		boolean error = userService.saveUser(user);
 
+		return error;
 	}
 
 	public List<UserResource> getAllUsers(String firstName, String lastName) {
-
-		List<UserResource> list = userService.getAllUsers(firstName, lastName);
+		List<User> users = userService.getAllUsers(firstName, lastName);
+		
+		List<UserResource> list = new ArrayList<>();
+		for (User user : users) {
+			list.add(convertDTOtoResource(user));
+		}
 
 		return list;
+	}
+	
+	private UserResource convertDTOtoResource(User user) {
+		UserResource res = new UserResource();
+
+		res.setFirstName(user.getFirst_name());
+		res.setLastName(user.getLast_name());
+		res.setDepartmentId(user.getDepartment_id());
+		res.setEmail(user.getEmail());
+
+		return res;
+	}
+	
+	public UserResource getUserById(Long user_id) {
+		User user = userService.getUserById(user_id);
+		
+		UserResource userRes = convertDTOtoResource(user);
+		
+		return userRes;
+	}
+	
+	public boolean updateUser(UserResource userResource) {
+
+		User user = new User();
+		user.setFirst_name(userResource.getFirstName());
+		user.setLast_name(userResource.getLastName());
+		user.setEmail(userResource.getEmail());
+		user.setDepartment_id(userResource.getDepartmentId());
+
+		boolean error = userService.updateUser(user);
+
+		return error;
 	}
 
 	public ResponseTemplateVO getUserWithDepartment(Long userId) {
 		ResponseTemplateVO vo = userService.getUserWithDepartment(userId);
-
 		return vo;
 	}
 

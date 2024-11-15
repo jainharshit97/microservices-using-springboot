@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,11 @@ public class UserController {
 
 		try {
 			// Call facade method to add user
-			userFacade.addUser(userResource);
+			boolean error = userFacade.addUser(userResource);
+
+			if (error) {
+				return ResponseEntity.badRequest().body(new MessageResponse("Error: Department Id does not exist!"));
+			}
 
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: User could not be added!"));
@@ -47,12 +52,43 @@ public class UserController {
 	// GET - users with filters
 	@CrossOrigin(origins = "*", exposedHeaders = "**")
 	@GetMapping(value = "/", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> searchBooks(@RequestParam(value = "firstName", required = false) String firstName,
+	public ResponseEntity<?> getUsers(@RequestParam(value = "firstName", required = false) String firstName,
 			@RequestParam(value = "lastName", required = false) String lastName, HttpServletRequest request) {
 
-		// Call facade method to get books with optional search criteria
+		// Call facade method to get users with optional search criteria
 		List<UserResource> users = userFacade.getAllUsers(firstName, lastName);
 		return ResponseEntity.ok(users);
+	}
+
+	// GET - users with path variable
+	@CrossOrigin(origins = "*", exposedHeaders = "**")
+	@GetMapping(value = "/{user_id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> getUserById(@PathVariable(value = "user_id", required = true) Long user_id,
+			HttpServletRequest request) {
+
+		// Call facade method to get books with optional search criteria
+		UserResource user = userFacade.getUserById(user_id);
+
+		return ResponseEntity.ok(user);
+	}
+
+	@CrossOrigin(origins = "*", exposedHeaders = "**")
+	@PutMapping(value = "/updateUser", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> updateUser(@RequestBody UserResource userResource) {
+
+		try {
+			// Call facade method to update user
+			boolean error = userFacade.updateUser(userResource);
+
+			if (error) {
+				return ResponseEntity.badRequest().body(new MessageResponse("Error: Department Id does not exist!"));
+			}
+
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: User could not be updated!"));
+		}
+
+		return ResponseEntity.ok(new MessageResponse("User successfully updated!"));
 	}
 
 	@GetMapping("/{userId}")
@@ -63,7 +99,7 @@ public class UserController {
 		try {
 			vo = userFacade.getUserWithDepartment(userId);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: User could not be added!"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Data could not be retrived!"));
 		}
 
 		return ResponseEntity.ok(vo);

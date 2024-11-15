@@ -1,11 +1,11 @@
 package com.userservice.pojo;
 
 public class UserResource {
-	
+
 	private String firstName;
 	private String lastName;
 	private String email;
-	private int departmentId;
+	private Long departmentId;
 
 	public String getFirstName() {
 		return firstName;
@@ -31,11 +31,11 @@ public class UserResource {
 		this.email = email;
 	}
 
-	public int getDepartmentId() {
+	public Long getDepartmentId() {
 		return departmentId;
 	}
 
-	public void setDepartmentId(int departmentId) {
+	public void setDepartmentId(Long departmentId) {
 		this.departmentId = departmentId;
 	}
 

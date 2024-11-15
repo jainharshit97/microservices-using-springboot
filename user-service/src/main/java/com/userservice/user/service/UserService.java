@@ -3,14 +3,17 @@ package com.userservice.user.service;
 import java.util.List;
 
 import com.userservice.pojo.ResponseTemplateVO;
-import com.userservice.pojo.UserResource;
 import com.userservice.user.entity.User;
 
 public interface UserService {
+
+	public boolean saveUser(User user);
+
+	public List<User> getAllUsers(String firstName, String lastName);
 	
-	public User saveUser(User user);
+	public User getUserById(Long user_id);
 	
-	public List<UserResource> getAllUsers(String firstName, String lastName);
+	public boolean updateUser(User user);
 
 	public ResponseTemplateVO getUserWithDepartment(Long userId);
 }

@@ -1,51 +1,56 @@
 package com.microservices.department.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "department")
 public class Department {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long departmentId;
-	private String departmentName;
-	private String departmentAddress;
-	private String departmentCode;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long department_id;
 
-	public Long getDepartmentId() {
-		return departmentId;
+	private String department_name;
+
+	private String department_address;
+
+	private String department_code;
+
+	public Long getDepartment_id() {
+		return department_id;
 	}
 
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
+	public void setDepartment_id(Long department_id) {
+		this.department_id = department_id;
 	}
 
-	public String getDepartmentName() {
-		return departmentName;
+	public String getDepartment_name() {
+		return department_name;
 	}
 
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
+	public void setDepartment_name(String department_name) {
+		this.department_name = department_name;
 	}
 
-	public String getDepartmentAddress() {
-		return departmentAddress;
+	public String getDepartment_address() {
+		return department_address;
 	}
 
-	public void setDepartmentAddress(String departmentAddress) {
-		this.departmentAddress = departmentAddress;
+	public void setDepartment_address(String department_address) {
+		this.department_address = department_address;
 	}
 
-	public String getDepartmentCode() {
-		return departmentCode;
+	public String getDepartment_code() {
+		return department_code;
 	}
 
-	public void setDepartmentCode(String departmentCode) {
-		this.departmentCode = departmentCode;
+	public void setDepartment_code(String department_code) {
+		this.department_code = department_code;
 	}
 
 }

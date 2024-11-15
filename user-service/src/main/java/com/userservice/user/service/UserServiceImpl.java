@@ -2,11 +2,13 @@ package com.userservice.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.userservice.pojo.Department;
 import com.userservice.pojo.ResponseTemplateVO;
 import com.userservice.pojo.UserResource;
 import com.userservice.user.entity.User;
@@ -26,12 +28,22 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public User saveUser(User user) {
-//    log.info("Inside saveUser method of UserService.");
-		return userRepository.save(user);
+	public boolean saveUser(User user) {
+//    log.info("Inside saveUser method of UserService.");\
+		
+		Department department = restTemplate
+				.getForObject("http://DEPARTMENTS/departments/" + user.getDepartment_id(), Department.class);
+		
+		if(department == null) {
+			return true;
+		}
+		
+		 userRepository.save(user);
+		
+		return false;
 	}
 
-	public List<UserResource> getAllUsers(String firstName, String lastName) {
+	public List<User> getAllUsers(String firstName, String lastName) {
 
 		List<User> users;
 		if (firstName != null || lastName != null) {
@@ -41,37 +53,37 @@ public class UserServiceImpl implements UserService {
 			// Fetch all books
 			users = userRepository.findAll();
 		}
-
-		List<UserResource> list = new ArrayList<>();
-		for (User user : users) {
-			list.add(convertDTOtoResource(user));
+		return users;
+	}
+	
+	public User getUserById(Long user_id) {
+		
+		User user = userRepository.getUserById(user_id);
+		return user;
+	}
+	
+	public boolean updateUser(User user) {
+		
+		try {
+			userRepository.updateUser(user.getUser_id(), user.getFirst_name(), user.getLast_name(), 
+					user.getEmail(), user.getDepartment_id());
+		} catch(Exception e) {
+			return true;
 		}
-
-		return list;
-
+		return false;
 	}
 
-	private UserResource convertDTOtoResource(User user) {
-		UserResource res = new UserResource();
-
-		res.setFirstName(user.getFirstName());
-		res.setLastName(user.getLastName());
-		res.setDepartmentId(user.getDepartmentId());
-		res.setEmail(user.getEmail());
-
-		return res;
-	}
-
-	public ResponseTemplateVO getUserWithDepartment(Long userId) {
+	public ResponseTemplateVO getUserWithDepartment(Long user_id) {
 //    log.info("Inside saveUser method of UserService.");
 		ResponseTemplateVO vo = new ResponseTemplateVO();
-		User user = userRepository.findByUserId(userId);
-//
-//    Department department = restTemplate.getForObject(
-//        "http://DEPARTMENT-SERVICE/departments/" + user.getDepartmentId(),
-//        Department.class);
-//    vo.setUser(user);
-//    vo.setDepartment(department);
+		Optional<User> users = userRepository.findById(user_id);
+		
+		User user = users.get();
+
+		Department department = restTemplate
+				.getForObject("http://DEPARTMENTS/departments/" + user.getDepartment_id(), Department.class);
+		vo.setUser(user);
+		vo.setDepartment(department);
 
 		return vo;
 	}

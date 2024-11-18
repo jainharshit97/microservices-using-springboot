@@ -1,21 +1,11 @@
-package com.userservice.pojo;
+package com.microservices.department.pojo;
 
 public class UserResource {
-
-	private Long userId;
 
 	private String firstName;
 	private String lastName;
 	private String email;
 	private Long departmentId;
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
 
 	public String getFirstName() {
 		return firstName;

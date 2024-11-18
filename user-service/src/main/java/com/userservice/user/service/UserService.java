@@ -11,7 +11,7 @@ public interface UserService {
 
 	public List<User> getAllUsers(String firstName, String lastName);
 	
-	public User getUserById(Long user_id);
+	public List<User> getUserByDepartmentId(Long department_id);
 	
 	public boolean updateUser(User user);
 

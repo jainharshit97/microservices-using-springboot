@@ -21,10 +21,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findById(Long user_id);
 
-	@Query("SELECT u FROM User u WHERE user_id = :user_id")
-	User getUserById(@Param("user_id") Long user_id);
+	@Query("SELECT u FROM User u WHERE department_id = :department_id")
+	List<User> getUserByDepartmentId(@Param("department_id") Long user_id);
 
 	@Modifying
-	@Query(value = "UPDATE user_table SET first_name = ?2 , last_name = ?3, email = ?4, department_id = ?5 WHERE id = ?1", nativeQuery = true)
-	void updateUser(Long userId, String first_name, String last_name, String email, Long department_id);
+	@Query(value = "UPDATE user_table SET first_name = ?2 , last_name = ?3, email = ?4, department_id = ?5 WHERE user_id = ?1", nativeQuery = true)
+	void updateUser(Long user_id, String first_name, String last_name, String email, Long department_id);
 }

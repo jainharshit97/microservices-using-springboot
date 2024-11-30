@@ -1,24 +1,18 @@
 package com.microservices.department.service;
 
+import java.util.List;
+
 import com.microservices.department.entity.Department;
-import com.microservices.department.repository.DepartmentRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.microservices.department.pojo.ResponseTemplateVO;
 
-@Service
-@Slf4j
-public class DepartmentService {
-  @Autowired
-  private DepartmentRepository departmentRepository;
+public interface DepartmentService {
+	public Department saveDepartment(Department department);
 
-  public Department saveDepartment(Department department) {
-    log.info("Inside saveDepartment of DepartmentService.");
-    return departmentRepository.save(department);
-  }
+	public List<Department> getAllDepartments(Long departmentId, String departmentCode);
 
-  public Department findDepartmentById(Long departmentId) {
-    log.info("Inside findDepartmentById of DepartmentService.");
-    return departmentRepository.findByDepartmentId(departmentId);
-  }
+	public void updateDepartment(Department department);
+
+	public Department findDepartmentById(Long departmentId);
+
+	public ResponseTemplateVO getDepartmentWithUsers(Long departmentId);
 }

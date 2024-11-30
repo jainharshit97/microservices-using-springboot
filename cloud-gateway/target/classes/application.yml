@@ -7,23 +7,23 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: USER-SERVICE
-          uri: lb://USER-SERVICE
+        - id: USERS
+          uri: lb://USERS
           predicates:
             - Path=/users/**
           filters:
             - name: CircuitBreaker
               args:
-                name: USER-SERVICE
+                name: USERS
                 fallbackuri: forward:/userServiceFallBack
-        - id: DEPARTMENT-SERVICE
-          uri: lb://DEPARTMENT-SERVICE
+        - id: DEPARTMENTS
+          uri: lb://DEPARTMENTS
           predicates:
             - Path=/departments/**
           filters:
             - name: CircuitBreaker
               args:
-                name: DEPARTMENT-SERVICE
+                name: DEPARTMENTS
                 fallbackuri: forward:/departmentServiceFallBack
 
 hystrix:
@@ -40,11 +40,11 @@ management:
       exposure:
         include: hystrix.stream
 
-#eureka:
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#  instance:
-#    hostname: localhost
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
